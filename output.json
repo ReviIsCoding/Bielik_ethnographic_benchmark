@@ -2,7 +2,7 @@
   "id modelu": "gemini-1.5-flash",
   "liczba_pytań": 2,
   "podsumowanie": {
-    "prowidłowe odpowiedzi": 2
+    "prawidłowe odpowiedzi": 2
   },
   "odpowiedzi": [
     {
@@ -17,8 +17,8 @@
       "Domena": "Etnologia",
       "Kategoria": "Historia",
       "Tagi": NaN,
-      "answers": "B",
-      "correctness": 1
+      "Odpowiedź modelu": "B",
+      "Poprawność": 1
     },
     {
       "Lp": 2,
@@ -32,8 +32,8 @@
       "Domena": "Etnologia",
       "Kategoria": "Historia",
       "Tagi": NaN,
-      "answers": "A",
-      "correctness": 1
+      "Odpowiedź modelu": "A",
+      "Poprawność": 1
     }
   ]
 }

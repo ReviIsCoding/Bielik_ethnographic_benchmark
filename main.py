@@ -65,13 +65,13 @@ W odpowiedzi podaj tylko literę A, B, C lub D odpowiedzi, którą uważasz za p
             correctness.append(0)
 
     # zapis do .csv
-    df['answers'] = responses
-    df['correctness'] = correctness
+    df['Odpowiedź modelu'] = responses
+    df['Poprawność'] = correctness
     #df.to_csv(output_path, index=False)
     #df.to_excel(output_path, sheet_name='Sheet1')
 
     # obliczenie liczby poprawnych odpowiedzi
-    correct_answers = df['correctness'].sum()
+    correct_answers = df['Poprawność'].sum()
     correct_answers = int(correct_answers)
 
 
@@ -82,7 +82,7 @@ W odpowiedzi podaj tylko literę A, B, C lub D odpowiedzi, którą uważasz za p
         "id modelu": llm_id,
         "liczba_pytań": df.shape[0],
         "podsumowanie": {
-            "prowidłowe odpowiedzi": correct_answers
+            "prawidłowe odpowiedzi": correct_answers
         },
         "odpowiedzi": answers_list
     }
