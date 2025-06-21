@@ -84,3 +84,10 @@ def ask_model(prompt: str, config: dict[str, Any]) -> tuple[str, str]:
      
     else:
         raise NotImplementedError(f"API backend '{api_type}' is not supported yet.")
+
+def parse_output(text:str) -> tuple [str, str]:
+    """
+    Dummy placeholder- parse model output into (answer, explanation) tuple.
+    """
+
+    return "A", "This is a dummy explanation."

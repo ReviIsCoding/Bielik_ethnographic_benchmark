@@ -17,13 +17,9 @@ def test_load_local_model_caching():
     pipe2 = llm_connector.load_local_model("sshleifer/tiny-gpt2")
     assert pipe1 is pipe2 # Ensures the same instance is returned
 
-def test_ask_model_with_valid_prompt(monkeypatch):
-    """ Test ask_model in local mode,
-    mocking parse_output to return a fixed answer and explanation. 
+def test_ask_model_with_valid_prompt():
+    """ Test ask_model in local mode using the default parse_output(). 
     """
-    def dumy_parser(text):
-        return "A", "This is a dummy explanation."
-    monkeypatch.setattr(llm_connector, "parse_output", dumy_parser)
 
     config = {
         'api': 'local',
@@ -34,6 +30,7 @@ def test_ask_model_with_valid_prompt(monkeypatch):
 
     prompt = "What is the ethnographic method? A) Observation B) Interview C) Survey D) Experiment"
     answer, explanation = llm_connector.ask_model(prompt, config)
+    
     assert answer == "A"
     assert explanation == "This is a dummy explanation."
 
