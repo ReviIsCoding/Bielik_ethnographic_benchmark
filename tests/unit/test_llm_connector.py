@@ -2,21 +2,50 @@ import pytest
 from unittest.mock import patch, MagicMock
 from modules import llm_connector
 
-def test_load_local_model_basic_pipeline():
-    """
-    Test the basic functionality of loading a local model pipeline.
-    """
-    pipe = llm_connector.load_local_model("sshleifer/tiny-gpt2")
-    assert pipe is not None
-    assert callable(pipe)
 
-def test_load_local_model_caching():
+@patch('modules.llm_connector.pipeline')
+@patch('modules.llm_connector.AutoTokenizer.from_pretrained')
+@patch('modules.llm_connector.AutoModelForCausalLM.from_pretrained')
+
+def test_load_local_model_basic_pipeline(mock_model, mock_tokenizer, mock_pipeline):
     """
-    Test that the local model is cached and reused.
+    Test if load_local)model creates a pipeline and caches output without downloading real model.
     """
-    pipe1 = llm_connector.load_local_model("sshleifer/tiny-gpt2")
-    pipe2 = llm_connector.load_local_model("sshleifer/tiny-gpt2")
+    mock_pipe_instance = MagicMock()
+    mock_pipeline.return_value = mock_pipe_instance
+    llm_connector._local_model_cache.clear() # Clear cache before the test
+
+    result = llm_connector.load_local_model('mock-model', use_q4 = False)
+    
+    mock_model.assert_called_once_with(
+        'mock-model',
+        device_map = 'auto',
+        trust_remote_code = True,
+        torch_dtype = llm_connector.torch.float16
+    )
+    mock_tokenizer.assert_called_once_with('mock-model')
+    mock_pipeline.assert_called_once()
+    assert result == mock_pipe_instance
+    assert llm_connector._local_model_cache['mock-model'] == mock_pipe_instance
+
+@patch('modules.llm_connector.pipeline')
+@patch('modules.llm_connector.AutoTokenizer.from_pretrained')
+@patch('modules.llm_connector.AutoModelForCausalLM.from_pretrained')
+
+def test_load_local_model_caching(mock_model, mock_tokenizer, mock_pipeline):
+    """
+    Test if load_local_model uses caching when called again.
+    """
+    mock_pipe_instance = MagicMock()
+    mock_pipeline.return_value = mock_pipe_instance
+    llm_connector._local_model_cache.clear() # Clear cache before the test
+    
+    pipe1 = llm_connector.load_local_model('mock-model', use_q4 = False)
+    pipe2 = llm_connector.load_local_model('mock-model', use_q4 = False)
+
     assert pipe1 is pipe2 # Ensures the same instance is returned
+    assert mock_model.call_count == 1
+    assert mock_pipeline.call_count == 1
 
 @patch("modules.llm_connector.load_local_model")
 @patch("modules.llm_connector.parse_output")
