@@ -1,6 +1,7 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 from typing import Any
+from utils import parse_output
 
 _local_model_cache = {}
 
@@ -77,17 +78,10 @@ def ask_model(prompt: str, config: dict[str, Any]) -> tuple[str, str]:
             print(f"Error generating response: {e}")
             return "Generation error", "Exception during generation."
         
-        answer, explanation = parse_output(raw_output)
-        return answer, explanation
+        
+        return parse_output(raw_output)
     
      # TODO: Add support for other APIs (e.g. OpenAI, vLLM, HuggingFace API)
      
     else:
         raise NotImplementedError(f"API backend '{api_type}' is not supported yet.")
-
-def parse_output(text:str) -> tuple [str, str]:
-    """
-    Dummy placeholder- parse model output into (answer, explanation) tuple.
-    """
-
-    return "A", "This is a dummy explanation."
