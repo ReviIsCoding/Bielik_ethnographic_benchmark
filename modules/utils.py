@@ -24,3 +24,33 @@ def parse_output(raw_output: str) -> Tuple[str, str]:
     except Exception as e:
         print(f"Error parsing output: {e}")
         return ("Parsing error", "Exception during parsing.")
+    
+PROMPT_TEMPLATE = (
+    """Wybierz poprawną odpowiedź spośród A, B, C i D. Uzasdnij krótko swój wybór.\n
+    Podaj wynik w formacie: \n
+    Answer: [A/B/C/D]\n
+    Explanation: [Twoja krótka odpowiedź]\n
+    Pytanie: {question}\n
+    A: {A}\n
+    B: {B}\n
+    C: {C}\n
+    D: {D}\n
+    """
+)
+    
+def build_prompt(row) -> str:
+    """Builds a prompt for the model from a DataFrame row.
+        
+    Args:
+        row (pd.Series): A row from the DataFrame with columns 'Pytanie', 'A', 'B', 'C', 'D'.
+            
+    Returns:
+       str: Formatted prompt string.
+    """
+    return PROMPT_TEMPLATE.format(
+         question=row['Pytanie'],
+         A=row['A'],
+         B=row['B'],
+         C=row['C'],
+        D=row['D']                                                                       
+    )

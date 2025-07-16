@@ -17,10 +17,10 @@ Stworzenie benchmarku porównującego jakość odpowiedzi różnych modeli języ
 ├── results/                      # Folder z odpowiedziami modeli i statystykami
 ├── test_files/                   # Przykładowe pliki testowe (CSV/XLSX)
 ├── moduły/                       # Folder z modułami funkcjonalnymi
-│   ├── dataset_loader.py         # Wczytywanie danych testowych
+│   ├── dataset_loader.py         # Wczytywanie danych testowych z pliku CSV/XLSX
 │   ├── llm_connector.py          # Obsługa komunikacji z modelami (lokalnie/API)
 │   ├── response_saver.py         # Zapis wyników do JSON/CSV
-│   └── utils.py                  # Funkcje pomocnicze
+│   └── utils.py                  # Funkcje pomocnicze (parsowanie outputu, budowa promptu)
 ├── _natalia_prototyp/           # Archiwum pierwszej wersji benchmarku
 ├── requirements.txt             # Lista wymaganych bibliotek
 └── README.md                    # Niniejszy plik
@@ -28,12 +28,12 @@ Stworzenie benchmarku porównującego jakość odpowiedzi różnych modeli języ
 
 ---
 
-## ▶️ Uruchamianie benchmarku
+## ▶️ Uruchamianie benchmarku - generowanie odpowiedzi
 
 ### Wersja CLI:
 
 ```bash
-python main.py \
+python benchmark_test_llm_main.py \
   --llm="bielik-chat" \
   --llm-name="Bielik" \
   --test="./test_files/test.xlsx" \
@@ -41,6 +41,8 @@ python main.py \
   --api="local" \
   --interval=0
 ```
+Po uruchomieniu benchmarku zapisywana jest lista surowych odpowiedzi modelu. 
+Porównanie odpowiedzi z prawidłowymi i statystyki są generowane w osobnym kroku (skrypt `benchmark_merge_results.py`).
 
 ### Wymagane argumenty:
 
@@ -70,12 +72,19 @@ Plik testowy powinien zawierać kolumny:
 
 ## 📤 Dane wyjściowe
 
-Skrypt zapisuje dwa pliki:
+Po uruchomieniu benchmarku zapisuje:
 
-1. `results/model.jsonl` – lista odpowiedzi modelu na każde pytanie
-2. `output.json` – podsumowanie (liczba pytań, poprawnych odpowiedzi itd.)
+- `results/model_raw.json` – surowe odpowiedzi modelu na każde pytanie (bez oceny)
+- (w kolejnym kroku) `results/model_summary.json` – podsumowanie ocen (tworzone osobnym skryptem)
 
 ---
+
+## 📝 Tworzenie promptu i przetwarzanie odpowiedzi
+
+- Prompt budowany jest na podstawie każdego wiersza z pliku testowego, zgodnie z szablonem zdefiniowanym w `utils.py` (`PROMPT_TEMPLATE`).
+- Odpowiedzi modelu są parsowane funkcją `parse_output()` z `utils.py` i zapisywane w surowej formie do pliku JSON przez `response_saver.py`.
+- Ocena poprawności i podsumowanie wyników odbywa się w kolejnym kroku, przez osobny skrypt (`benchmark_merge_results.py`).
+
 
 ## 🔧 Wymagania
 
