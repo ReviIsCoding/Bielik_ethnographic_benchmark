@@ -52,5 +52,5 @@ def build_prompt(row) -> str:
          A=row['A'],
          B=row['B'],
          C=row['C'],
-        D=row['D']                                                                       
+         D=row['D']                                                                       
     )

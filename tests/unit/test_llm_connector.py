@@ -9,7 +9,7 @@ from modules import llm_connector
 
 def test_load_local_model_basic_pipeline(mock_model, mock_tokenizer, mock_pipeline):
     """
-    Test if load_local)model creates a pipeline and caches output without downloading real model.
+    Test if load_local_model creates a pipeline and caches output without downloading real model.
     """
     mock_pipe_instance = MagicMock()
     mock_pipeline.return_value = mock_pipe_instance
