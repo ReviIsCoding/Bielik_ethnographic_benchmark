@@ -1,7 +1,7 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 from typing import Any
-from utils import parse_output
+from modules.utils import parse_output
 
 _local_model_cache = {}
 

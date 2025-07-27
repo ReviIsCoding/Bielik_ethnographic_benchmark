@@ -15,7 +15,7 @@ Stworzenie benchmarku porównującego jakość odpowiedzi różnych modeli języ
 ```
 ├── benchmark_test_llm_main.py    # Główny skrypt uruchamiający testowanie
 ├── results/                      # Folder z odpowiedziami modeli i statystykami
-├── test_files/                   # Przykładowe pliki testowe (CSV/XLSX)
+├── tests/                        # Folder z plikami testów jednostkowych i integracyjnych
 ├── moduły/                       # Folder z modułami funkcjonalnymi
 │   ├── dataset_loader.py         # Wczytywanie danych testowych z pliku CSV/XLSX
 │   ├── llm_connector.py          # Obsługa komunikacji z modelami (lokalnie/API)
@@ -85,6 +85,26 @@ Po uruchomieniu benchmarku zapisuje:
 - Odpowiedzi modelu są parsowane funkcją `parse_output()` z `utils.py` i zapisywane w surowej formie do pliku JSON przez `response_saver.py`.
 - Ocena poprawności i podsumowanie wyników odbywa się w kolejnym kroku, przez osobny skrypt (`benchmark_merge_results.py`).
 
+## 🧪 Testowanie
+
+Projekt zawiera dwa poziomy testów:
+
+- **Testy jednostkowe** – dotyczą funkcji pomocniczych z modułów w folderze `modules/` (np. `utils`, `dataset_loader`, `response_saver`). Znajdują się w `tests/unit/`.
+- **Testy integracyjne** – obejmują główny przebieg działania benchmarku:
+  - `benchmark_test_llm_main.py` – testowanie logiki uruchamiania modelu
+  - `benchmark_merge_results.py` – testowanie przetwarzania wyników i generowania statystyk  
+  Znajdują się w `tests/integration/`.
+
+### 🔄 Uruchamianie testów
+
+Uruchomienie wszystkich testów w bash:
+`pytest`
+
+Tylko testy jednostkowe w bash:
+`pytest tests/unit/`
+
+Tylko testy integracyjne w bash:
+`pytest tests/integration/`
 
 ## 🔧 Wymagania
 
@@ -102,7 +122,7 @@ pip install -r requirements.txt
 ## 👥 Zespół
 
 - Natalia Nadolna (https://github.com/NataliaNadolna)
-- Revi (https://github.com/ReviIsCoding)
+- Anna Zielińska (https://github.com/ReviIsCoding)
 - Krzysztof Raszczuk – konsultacje merytoryczne
 
 ---
