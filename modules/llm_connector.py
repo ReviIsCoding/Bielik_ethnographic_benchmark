@@ -1,7 +1,14 @@
+import os
 import torch
+import requests
+from openai import OpenAI
+import google.generativeai as genai
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 from typing import Any
 from modules.utils import parse_output
+from dotenv import load_dotenv
+
+load_dotenv()
 
 _local_model_cache = {}
 
@@ -53,8 +60,9 @@ def ask_model(prompt: str, config: dict[str, Any]) -> tuple[str, str]:
     Args:
         prompt (str): Full formatted prompt including question and multiple-choice options.
         config (dict): Configuration dictionary containing at least:
-            - 'api': one of [local, OpenAI, ...]
+            - 'api': one of ['local', 'openAI', 'google', 'hf_api']
             - 'model_id' : Hugging Face model ID or API name
+            - other API-specific keys (e.g., 'api_key', 'url', 'use_q4', etc.),
             - 'use_q4' : (optional) use quantized model
             - 'max_length' : (optional) max token length
 
@@ -78,10 +86,64 @@ def ask_model(prompt: str, config: dict[str, Any]) -> tuple[str, str]:
             print(f"Error generating response: {e}")
             return "Generation error", "Exception during generation."
         
+        return parse_output(raw_output)
+    
+    elif api_type == 'openAI':
+        try:
+            client = OpenAI(
+                api_key = config.get("api_key") or os.getenv("OPENAI_API_KEY"),
+                base_url=config.get("url") # optional: for Azure or custom
+            )
+            response = client.chat.completions.create(
+                model = config["model_id"],
+                messages = [{"role": "user", "content": prompt}],
+                max_tokens = config.get("max_length", 256)
+            )
+            raw_output = response.choices[0].message.content.strip()
+        except Exception as e:
+            print(f"OpenAI error: {e}")
+            return "Generation error", "Exception during generation."
         
         return parse_output(raw_output)
     
-     # TODO: Add support for other APIs (e.g. OpenAI, vLLM, HuggingFace API)
-     
+    elif api_type == 'google':
+        try:
+            api_key = config.get("api_key") or os.getenv("GOOGLE_API_KEY")
+            genai.configure(api_key=api_key)
+            model = genai.GenerativeModel(model_name=config["model_id"])
+            response = model.generate_content(prompt)
+            raw_output = response.text.strip()
+
+        except Exception as e:
+            print(f"Google Generative AI error: {e}")
+            return "Generation error", "Exception during generation."
+        
+        return parse_output(raw_output)
+
+    elif api_type == 'hf_api':
+        try:
+            api_key = config.get("api_key") or os.getenv("HF_API_KEY")
+            headers = {
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json"
+            }
+            endpoint = config.get("url", f"https://api-inference.huggingface.co/models/{config['model_id']}")
+            payload = {
+                "inputs": prompt,
+                "parameters": {
+                    "max_new_tokens": config.get("max_length", 512),
+                    "do_sample": False,
+                    "return_full_text": False
+                }
+            }
+            response = requests.post(endpoint, headers=headers, json=payload)
+            response.raise_for_status()
+            raw_output = response.json()[0]["generated_text"].strip()
+        except Exception as e:
+            print(f"Hugging Face API error: {e}") 
+            return "Generation error", "Exception during generation."
+        
+        return parse_output(raw_output)
+
     else:
         raise NotImplementedError(f"API backend '{api_type}' is not supported yet.")

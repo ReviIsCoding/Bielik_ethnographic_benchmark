@@ -79,20 +79,67 @@ def test_ask_model_logic_with_mock(mock_parse_output, mock_load_model):
     answer, explanation = llm_connector.ask_model(prompt, config)
 
     # Assert
-    mock_load_model.asser_called_once_with('mock-model', use_q4 = False)
+    mock_load_model.assert_called_once_with('mock-model', use_q4 = False)
     mock_pipe.assert_called_once_with(prompt, max_length=100, do_sample = False, truncation = True)
     mock_parse_output.assert_called_once_with('A. Explanation about ethnography.')
     assert answer == 'A'
     assert explanation == 'Explanation about ethnography.'
 
+
+@patch("modules.llm_connector.parse_output", return_value = ("B", "Explanation from OpenAI."))
+@patch("modules.llm_connector.OpenAI")
+def test_ask_model_openai(mock_openai_class, mock_parse_output):
+    """ Tests ask_model() with mock_openai_class, 
+        returns mocked answer.
+    """
+    mock_client = MagicMock()
+    mock_response = MagicMock()
+    mock_response.choices = [MagicMock(message=MagicMock(content="Answer: B\nExplanation: Explanation from OpenAI."))]
+    mock_client.chat.completions.create.return_value = mock_response
+    mock_openai_class.return_value = mock_client
+
+    config = {"api": "openAI", "model_id": "openai-model", "api_key": "sk-test"}
+    answer, explanation = llm_connector.ask_model("test prompt", config)
+
+    assert answer == "B"
+    assert explanation == "Explanation from OpenAI."
+
+@patch("modules.llm_connector.parse_output", return_value=("C", "Explanation from Google."))
+@patch("modules.llm_connector.genai.GenerativeModel")
+@patch("modules.llm_connector.genai.configure")
+def test_ask_model_google(mock_configure, mock_generative_model_class, mock_parse_output):
+    mock_model = MagicMock()
+    mock_model.generate_content.return_value.text = "Answer: C\nExplanation: Explanation from Google."
+    mock_generative_model_class.return_value = mock_model
+
+    config = {"api": "google", "model_id": "gemini_model", "api_key": "gapi-test"}
+    answer, explanation = llm_connector.ask_model("test prompt", config)
+
+    assert answer == "C"
+    assert explanation == "Explanation from Google."
+
+@patch("modules.llm_connector.parse_output", return_value=("D", "Explanation from HF API."))
+@patch("modules.llm_connector.requests.post")
+def test_ask_model_hf_api(mock_post, mock_parse_output):
+    mock_response = MagicMock()
+    mock_response.raise_for_status.return_value = None
+    mock_response.json.return_value = [{"generated_text": "Answer: D\nExplanation: Explanation from HF API."}]
+    mock_post.return_value = mock_response
+
+    config = {"api": "hf_api", "model_id": "hf/test-model", "api_key": "hf-token"}
+    answer, explanation = llm_connector.ask_model("test prompt", config)
+
+    assert answer == "D"
+    assert explanation == "Explanation from HF API."
+
 def test_ask_model_unsupported_api():
     """
-    Test if using API raises an error.
+    Test if unsupported API raises NotImplementedError.
     """
 
     config = {
-        'api': 'openAI',
-        'model_id' : "some model"
+        'api': 'vllm',
+        'model_id' : "model-x"
     }
     with pytest.raises(NotImplementedError):
         llm_connector.ask_model("What is the ethnographic method?", config)
