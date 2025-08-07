@@ -8,3 +8,4 @@ google-generativeai>=0.3.0
 python-dotenv>=1.0.0
 pytest=>8.4.1
 openpyxl>=3.0.0
+requests>=2.0.0

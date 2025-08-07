@@ -2,8 +2,8 @@ import argparse
 import time
 from pathlib import Path
 from modules.dataset_loader import load_dataset
-from modules.llm_connector import load_local_model, ask_model
-from modules.utils import parse_output, build_prompt
+from modules.llm_connector import ask_model
+from modules.utils import build_prompt
 from modules.response_saver import save_raw_results
 
 def main():
@@ -14,12 +14,12 @@ def main():
 
     parser = argparse.ArgumentParser(description = "Ethnographic Benchmark Runner")
     parser.add_argument("--test", type=str, required=True, help="Path to the test dataset file (.csv/.xlsx)")
-    parser.add_argument("--results", type=str, required=True, help="Path tp save raw results (.json)")
-    parser.add_argument("--llm", type=str, required=True, help="Model identifier (local od API)")
+    parser.add_argument("--results", type=str, required=True, help="Path to save raw results (.json)")
+    parser.add_argument("--llm", type=str, required=True, help="Model identifier (local or API)")
     parser.add_argument("--llm_name", type=str, required=True, help="Friendly model name for reports")
-    parser.add_argument("--api", type=str, required=True, help="API type: local | openAI | vllm")
+    parser.add_argument("--api", type=str, required=True, help="API type: local | openAI | google| hf_api | vllm")
     parser.add_argument("--url", type=str, default=None, help="API URL (if applicable)")
-    parser.add_argument("--key", type=str, default=None, help="API key (if applicable)")
+    parser.add_argument("--key", type=str, default=None, help="API key (if applicable, otherwise loaded from .env)")
     parser.add_argument("--max_length", type=int, default=256, help="Maximum length of the model's response")
     parser.add_argument("--use_q4", action='store_true', help="Use quantized model (local only)")
     parser.add_argument("--interval", type=int, default=1, help= "Delay between questions in seconds")
@@ -43,9 +43,7 @@ def main():
     for idx, row in test_data.iterrows():
         prompt = build_prompt(row)
         try:
-            # TODO: Extend ask_model in llm_connector.py tp handle API-based models
-            raw_output = ask_model(prompt, model_config)
-            answer,explanation = parse_output(raw_output)
+            answer, explanation = ask_model(prompt, model_config)
         except Exception as e:
             print(f"Error processing question {idx}: {e}")
             answer, explanation = "Generation error", "Exception during processing"
@@ -71,7 +69,6 @@ def main():
 
         print (f"Finished {len(results)} questions in {total_time:.2f} seconds. Results saved to: {args.results}")
 
-        # TODO : Add summary of execution stats here if needed (e.g. total questions, time)
               
 if __name__ == "__main__":
     main()
