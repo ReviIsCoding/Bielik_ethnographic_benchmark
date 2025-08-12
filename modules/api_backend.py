@@ -37,7 +37,7 @@ def run_api_model(prompt: str, config: dict[str, Any]) -> tuple[str, str]:
     if api_type == "openAI":
 
         try:
-            api_key = config.get("api_key") or os.getenv("OPENAI_API_KEY"),
+            api_key = config.get("api_key") or os.getenv("OPENAI_API_KEY")
             client = OpenAI(api_key = api_key, base_url = config.get("url"))
 
             response = client.chat.completions.create(
@@ -76,7 +76,7 @@ def run_api_model(prompt: str, config: dict[str, Any]) -> tuple[str, str]:
                 "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json"
             }
-            endpoint = config.get("url", f"https://api-inference.huggingface.co/models/{config['model_id']}")
+            endpoint = (config.get("url") or f"https://api-inference.huggingface.co/models/{config['model_id']}")
             payload = {
                 "inputs": prompt,
                 "parameters": {

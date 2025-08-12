@@ -1,0 +1,62 @@
+[
+  {
+    "numer": 0,
+    "pytanie": "Jaki język tradycyjnie używany był przez Łemków?",
+    "poprawna": "B",
+    "odpowiedź": "B",
+    "uzasadnienie": "Łemkowie to grupa etniczna posługująca się językiem łemkowskim, dialektem języka ruskiego.",
+    "meta": {
+      "domena": "Etnologia",
+      "kategoria": "Historia",
+      "tagi": NaN
+    }
+  },
+  {
+    "numer": 1,
+    "pytanie": "W jakim regionie Polski odbywa się coroczny Festiwal Kultury Kresowej?",
+    "poprawna": "C",
+    "odpowiedź": "D",
+    "uzasadnienie": "Festiwal Kultury Kresowej odbywa się w Przemyślu.",
+    "meta": {
+      "domena": "Etnologia",
+      "kategoria": "Kultura",
+      "tagi": NaN
+    }
+  },
+  {
+    "numer": 2,
+    "pytanie": "\tJak nazywa się tradycyjna drewniana chata góralska w Tatrach?",
+    "poprawna": "A",
+    "odpowiedź": "D",
+    "uzasadnienie": "Kurna chata to tradycyjna drewniana chata góralska w Tatrach.  Szałas, jurta i wigwam to konstrukcje charakterystyczne dla innych regionów i kultur.",
+    "meta": {
+      "domena": "Etnologia",
+      "kategoria": "Architektura",
+      "tagi": "góry"
+    }
+  },
+  {
+    "numer": 3,
+    "pytanie": "Jakie zwierzę jest symbolem Podlasia, często spotykanym w tamtejszych herbach?",
+    "poprawna": "D",
+    "odpowiedź": "D",
+    "uzasadnienie": "Żubr jest zwierzęciem powszechnie kojarzonym z Podlasiem i często występuje w herbach regionu.",
+    "meta": {
+      "domena": "Etnologia",
+      "kategoria": "Przyroda",
+      "tagi": "symbole, regiony"
+    }
+  },
+  {
+    "numer": 4,
+    "pytanie": "Który z poniższych instrumentów jest tradycyjny dla muzyki kaszubskiej?",
+    "poprawna": "B",
+    "odpowiedź": "C",
+    "uzasadnienie": "Cymbały są tradycyjnym instrumentem w muzyce kaszubskiej. Pozostałe instrumenty nie są z nią silnie kojarzone.",
+    "meta": {
+      "domena": "Etnologia",
+      "kategoria": "Muzyka",
+      "tagi": "regiony"
+    }
+  }
+]

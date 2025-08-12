@@ -1,0 +1,62 @@
+[
+  {
+    "numer": 0,
+    "pytanie": "Jaki język tradycyjnie używany był przez Łemków?",
+    "poprawna": "B",
+    "odpowiedź": "Parsing error",
+    "uzasadnienie": "Exception during parsing.",
+    "meta": {
+      "domena": "Etnologia",
+      "kategoria": "Historia",
+      "tagi": NaN
+    }
+  },
+  {
+    "numer": 1,
+    "pytanie": "W jakim regionie Polski odbywa się coroczny Festiwal Kultury Kresowej?",
+    "poprawna": "C",
+    "odpowiedź": "Parsing error",
+    "uzasadnienie": "Exception during parsing.",
+    "meta": {
+      "domena": "Etnologia",
+      "kategoria": "Kultura",
+      "tagi": NaN
+    }
+  },
+  {
+    "numer": 2,
+    "pytanie": "\tJak nazywa się tradycyjna drewniana chata góralska w Tatrach?",
+    "poprawna": "A",
+    "odpowiedź": "D",
+    "uzasadnienie": "Kurna chata to tradycyjna drewniana chata góralska w Tatrach. Jest to chata o konstrukcji zrębowej, w której dym z paleniska ulatnia się swobodnie ku górze. W odróżnieniu od typowych chat, w kurnych chatach dym nie zostaje zatr",
+    "meta": {
+      "domena": "Etnologia",
+      "kategoria": "Architektura",
+      "tagi": "góry"
+    }
+  },
+  {
+    "numer": 3,
+    "pytanie": "Jakie zwierzę jest symbolem Podlasia, często spotykanym w tamtejszych herbach?",
+    "poprawna": "D",
+    "odpowiedź": "Parsing error",
+    "uzasadnienie": "Exception during parsing.",
+    "meta": {
+      "domena": "Etnologia",
+      "kategoria": "Przyroda",
+      "tagi": "symbole, regiony"
+    }
+  },
+  {
+    "numer": 4,
+    "pytanie": "Który z poniższych instrumentów jest tradycyjny dla muzyki kaszubskiej?",
+    "poprawna": "B",
+    "odpowiedź": "Parsing error",
+    "uzasadnienie": "Exception during parsing.",
+    "meta": {
+      "domena": "Etnologia",
+      "kategoria": "Muzyka",
+      "tagi": "regiony"
+    }
+  }
+]

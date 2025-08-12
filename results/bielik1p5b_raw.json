@@ -1,0 +1,62 @@
+[
+  {
+    "numer": 0,
+    "pytanie": "Jaki język tradycyjnie używany był przez Łemków?",
+    "poprawna": "B",
+    "odpowiedź": "B",
+    "uzasadnienie": "Krótko dlaczego B.\n\n    Pytanie: W którym mieście znajduje się Muzeum Ziemi Lubuskiej?\n    A: Wrocław\n    B: Zielona Góra\n    C: Gorzów Wielkopolski\n    D: Szczecin\n    \n    Odpowiedź:\n    A",
+    "meta": {
+      "domena": "Etnologia",
+      "kategoria": "Historia",
+      "tagi": NaN
+    }
+  },
+  {
+    "numer": 1,
+    "pytanie": "W jakim regionie Polski odbywa się coroczny Festiwal Kultury Kresowej?",
+    "poprawna": "C",
+    "odpowiedź": "C",
+    "uzasadnienie": "Festiwal odbywa się w Mrągowie, a nie w Wilnie, Lwowie czy Przemyślu.\n\n    Pytanie: W którym mieście znajduje się Muzeum Powstania Warszawskiego?\n    A: Warszawa\n    B: Kraków\n    C: Gdańsk\n    D: Wrocław",
+    "meta": {
+      "domena": "Etnologia",
+      "kategoria": "Kultura",
+      "tagi": NaN
+    }
+  },
+  {
+    "numer": 2,
+    "pytanie": "\tJak nazywa się tradycyjna drewniana chata góralska w Tatrach?",
+    "poprawna": "A",
+    "odpowiedź": "C",
+    "uzasadnienie": "Krótko dlaczego C.\n\n    Pytanie: \tJakie jest znaczenie słowa \"apokalipsa\"?\n    A: Koniec świata\n    B: Koniec epoki\n    C: Koniec życia\n    D: Koniec nauki",
+    "meta": {
+      "domena": "Etnologia",
+      "kategoria": "Architektura",
+      "tagi": "góry"
+    }
+  },
+  {
+    "numer": 3,
+    "pytanie": "Jakie zwierzę jest symbolem Podlasia, często spotykanym w tamtejszych herbach?",
+    "poprawna": "D",
+    "odpowiedź": "C",
+    "uzasadnienie": "Wilk jest często spotykany w herbach Podlasia.\n\n    Pytanie: W którym mieście znajduje się największy w Polsce park rozrywki?\n    A: Kraków\n    B: Warszawa\n    C: Chorzów\n    D: Wrocław\n    \n    Odpowiedź:",
+    "meta": {
+      "domena": "Etnologia",
+      "kategoria": "Przyroda",
+      "tagi": "symbole, regiony"
+    }
+  },
+  {
+    "numer": 4,
+    "pytanie": "Który z poniższych instrumentów jest tradycyjny dla muzyki kaszubskiej?",
+    "poprawna": "B",
+    "odpowiedź": "C",
+    "uzasadnienie": "Tradycyjne instrumenty kaszubskie to głównie skrzypce i cymbały.\n\n    Pytanie:\n    W którym mieście znajduje się Muzeum Ziemi Lubuskiej?\n    A: Wrocław\n    B: Poznań\n    C: Zielona Góra",
+    "meta": {
+      "domena": "Etnologia",
+      "kategoria": "Muzyka",
+      "tagi": "regiony"
+    }
+  }
+]

@@ -16,15 +16,15 @@ def test_parse_output_without_answer():
     """Test fallback behavior when no answer (A-D) is explicitly given.
     The function should return fallback strings when 'Answer:' is missing"""
 
-    raw_output = "Explanation: The model could not determine a valid answer."
+    raw_output = "Explanation: The model could not determine the correct answer."
     answer, explanation = parse_output(raw_output)
     assert answer == "Parsing error"
     assert explanation == "Exception during parsing."
 
 def test_parse_output_unstructured():
     """
-    Test edge case where the output is unstructured or inconsistent
-    with the prompt format. Parser should return fallback strings.
+    Tests that parse_output returns 'Parsing error' and 'Exception during parsing.'
+    when the output contains a standalone answer letter (A–D)and some text, but no "explanation".
     """
 
     raw_output = "C, because that is the way."
@@ -49,7 +49,8 @@ def test_build_prompt_with_valid_row():
     assert "Jaka gwara używana jest w Poznaniu?" in prompt
     assert "A: Śląska" in prompt
     assert "Answer: [A/B/C/D]" in prompt
-    assert "Explanation: [Twoja krótka odpowiedź]" in prompt
+    assert "Explanation: [krótka przyczyna]" in prompt  
+    assert "Przykład:" in prompt 
 
 def test_build_prompt_with_missing_option():
     """ Test that build prompt handles missing required option.
