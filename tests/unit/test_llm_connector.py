@@ -58,17 +58,6 @@ def test_ask_model_google_api_delegation(monkeypatch):
     assert answer == "C"
     assert explanation == "response from google"
 
-def test_ask_model_hf_api_delegation(monkeypatch):
-    """
-    Test if ask_model delegates correctly to run_api_model when using HuggingFace API.
-    """
-    monkeypatch.setattr("modules.llm_connector.run_api_model", lambda p, c: ("D", "response from hf"))
-    config = {"api": "hf_api", "model_id": "hf-test"}
-    answer, explanation = ask_model("prompt", config)
-
-    assert answer == "D"
-    assert explanation == "response from hf"
-
 def test_ask_model_backend_error_propagation(monkeypatch):
     """
     Test if ask_model propagates exceptions thrown by the backend function.

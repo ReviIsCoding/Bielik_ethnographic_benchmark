@@ -37,7 +37,7 @@ def test_logic_single_question(mock_ask_model, tmp_path):
         model_config = {
             "api": "local",
             "model_id": "mock_model",
-            "max_length": 256,
+            "max_new_tokens": 128,
             "use_q4": False,
             "api_key": None,
             "url": None
@@ -93,7 +93,7 @@ def test_logic_single_question_error(mock_ask_model, tmp_path):
     model_config = {
         "api": "local",
         "model_id": "mock_model",
-        "max_length": 256,
+        "max_new_tokens": 128,
         "use_q4": False
     }
 

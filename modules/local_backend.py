@@ -46,13 +46,13 @@ def load_local_model(model_id: str, use_q4: bool = False):
 
 def run_local_model(prompt: str, config: dict[str, Any]) -> tuple[str, str]:
     """
-    Executes a prompt using a logal Hugging Face model via pipeline.
+    Executes a prompt using a local Hugging Face model via pipeline.
 
     Args:
         prompt (str): The input prompt.
         config (dict): Configuration dict. Expected keys:
             - model_id: Hugging Face model ID
-            - max_length: (optional) token limit
+            - max_new_tokens: (optional) new tokens limit
             - use_q4: (optional) whether to use quantization
     
     Returns:
@@ -60,14 +60,19 @@ def run_local_model(prompt: str, config: dict[str, Any]) -> tuple[str, str]:
     """
 
     model_id = config["model_id"]
-    max_length = config.get("max_length", 256)
+    max_new_tokens = int(config.get("max_new_tokens", 256) or 256)
     use_q4 = config.get("use_q4", False)
 
     pipe = load_local_model(model_id, use_q4=use_q4)
 
     try:
         print(f"[Local model] Prompting model with:\n{prompt}")
-        response = pipe(prompt, max_length = max_length, do_sample = False, truncation = True)
+        response = pipe(
+            prompt, 
+            max_new_tokens=max_new_tokens, 
+            do_sample = False, 
+            truncation = True
+        )
         raw_output = response[0]["generated_text"].strip()
     except Exception as e:
         print(f"[ERROR] Local model generation failed: {e}")

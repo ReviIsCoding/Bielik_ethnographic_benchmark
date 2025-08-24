@@ -43,36 +43,39 @@ def test_run_api_model_google(mock_configure, mock_model_class, mock_parse):
     assert answer == "C"
     assert explanation == 'google explanation'
 
-@patch("modules.api_backend.parse_output", return_value = ("D", "hf explanation"))
-@patch("modules.api_backend.requests.post")
-def test_run_api_model_hf_api(mock_post, mock_parse):
-    """
-    Tests the run_api_model function for the Hugging Face API backend:
-    - Mocks the requests.post call and its response,
-    - Verifies that the function correctly parses the model's output,
-    - Checks that the returned answer and explanation match the expected values.
-    """
-    mock_response = MagicMock()
-    mock_response.raise_for_status.return_value = None
-    mock_response.json.return_value = [{"generated_text": "Answer: D\nExplanation: hf explanation"}]
-    mock_post.return_value = mock_response
+@patch("modules.api_backend.parse_output", return_value=("B", "openai"))
+@patch("modules.api_backend.OpenAI")
+def test_run_api_model_openai_uses_max_new_tokens(mock_openai, _):
+    """Test if run_api_model correctly uses max_new_tokens from config."""
+    mc = MagicMock()
+    resp = MagicMock()
+    resp.choices = [MagicMock(message=MagicMock(content="Answer: B\nExplanation: openai"))]
+    mc.chat.completions.create.return_value = resp
+    mock_openai.return_value = mc
 
-    config = {"api": "hf_api", "model_id": "mock-model", "api_key": "z"}
-    answer, explanation = run_api_model("prompt", config)
+    cfg = {"api": "openAI", "model_id": "gpt-4o", "api_key": "x", "max_new_tokens": 77}
+    run_api_model("prompt", cfg)
 
-    assert answer == "D"
-    assert explanation == "hf explanation"
+    mc.chat.completions.create.assert_called_once()
+    _, kwargs = mc.chat.completions.create.call_args
+    
+    assert kwargs["max_tokens"] == 77
 
+@patch("modules.api_backend.parse_output", return_value=("C", "google"))
+@patch("modules.api_backend.genai.GenerativeModel")
+@patch("modules.api_backend.genai.configure")
+def test_run_api_model_google_success(_, mock_model_cls, __):
+    """Test if run_api_model correctly uses Google GenerativeModel and returns expected output."""
+    mock_model = MagicMock()
+    mock_model.generate_content.return_value.text = "Answer: C\nExplanation: google"
+    mock_model_cls.return_value = mock_model
 
-@patch("modules.api_backend.requests.post", side_effect=ConnectionError("Network unreachable"))
-def test_run_api_model_hf_api_connection_error(mock_post):
-    """
-    Test if run_api_model handles network connection errors for HuggingFace API.
-    """
-    config = {"api": "hf_api", "model_id": "test"}
-    answer, explanation = run_api_model("prompt", config)
-    assert answer == "Generation error"
-    assert "Exception during generation" in explanation
+    cfg = {"api": "google", "model_id": "gemini-1.5-pro", "api_key": "g", "max_new_tokens": 64}
+    a, e = run_api_model("p", cfg)
+
+    assert (a, e) == ("C", "google")
+    mock_model.generate_content.assert_called_once_with("p", generation_config={"max_output_tokens": 64})
+
 
 @patch("modules.api_backend.OpenAI")
 def test_run_api_model_openai_error(mock_openai):
@@ -109,17 +112,3 @@ def test_run_api_model_missing_model_id():
     with pytest.raises(KeyError):
         run_api_model("prompt", config)
 
-@patch("modules.api_backend.requests.post")
-def test_run_api_model_hf_api_unexpected_response(mock_post):
-    """
-    Test if run_api_model handles unexpected HF API response structure (no 'generated_text').
-    """
-    mock_response = MagicMock()
-    mock_response.raise_for_status.return_value = None
-    mock_response.json.return_value = [{}]  # missing "generated_text"
-    mock_post.return_value = mock_response
-
-    config = {"api": "hf_api", "model_id": "test", "api_key": "x"}
-    answer, explanation = run_api_model("prompt", config)
-    assert answer == "Generation error"
-    assert "Exception during generation" in explanation

@@ -9,7 +9,7 @@ def ask_model(prompt: str, config: dict[str, Any]) -> tuple[str, str]:
     Args:
         prompt (str): The full prompt to send to the model.
         config (dict): Configuration dictionary with at least:
-            - 'api': 'local', 'openAI', 'google', or 'hf_api'
+            - 'api': 'local', 'openAI' or 'google'
             - 'model_id': model name or HF ID
             - additional backend specific options
 
@@ -21,7 +21,7 @@ def ask_model(prompt: str, config: dict[str, Any]) -> tuple[str, str]:
 
     if api_type == 'local':
         return run_local_model(prompt, config)
-    elif api_type in ["openAI", "google", "hf_api"]:
+    elif api_type in ["openAI", "google"]:
         return run_api_model(prompt, config)
     else:
         raise NotImplementedError(f"Unsupported API backend: {api_type}") 

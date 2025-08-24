@@ -59,12 +59,29 @@ def test_run_local_model_success(mock_load_model, mock_parse):
     mock_pipe = MagicMock(return_value=[{"generated_text": "Answer: A\nExplanation: explanation"}])
     mock_load_model.return_value = mock_pipe
 
-    config = {'model_id': 'mock-id', 'max_length': 100}
+    config = {'model_id': 'mock-id', 'max_new_tokens': 100}
     answer, explanation = run_local_model("prompt", config)
 
     assert answer == "A"
     assert explanation == "explanation"
-    mock_pipe.assert_called_once_with("prompt", max_length=100, do_sample=False, truncation=True)
+    mock_pipe.assert_called_once_with("prompt", max_new_tokens=100, do_sample=False, truncation=True)
+
+# -------------------------------
+#  TEST: Using max_new_tokens from config
+# -------------------------------
+
+@patch('modules.local_backend.parse_output', return_value=("A", "ok"))
+@patch('modules.local_backend.load_local_model')
+def test_run_local_model_uses_max_new_tokens(mock_load_model, _):
+    """ Test that run_local_model uses max_new_tokens from param."""
+    mock_pipe = MagicMock(return_value=[{"generated_text": "Answer: A\nExplanation: ok"}])
+    mock_load_model.return_value = mock_pipe
+    cfg = {"model_id": "m", "max_new_tokens": 42}
+    run_local_model("p", cfg)
+    mock_pipe.assert_called_once()
+    _, kwargs = mock_pipe.call_args
+    
+    assert kwargs["max_new_tokens"] == 42
 
 # -------------------------------
 #  TEST: Error handling in the pipeline
@@ -104,6 +121,6 @@ def test_load_local_model_use_q4(mock_model, mock_tokenizer, mock_pipeline):
 # -------------------------------
 
 def test_run_local_model_missing_model_id():
-    config = {"max_length": 100}
+    config = {"max_new_tokens": 100}
     with pytest.raises(KeyError):
         run_local_model("prompt", config)

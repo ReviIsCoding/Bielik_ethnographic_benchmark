@@ -17,7 +17,7 @@ Projekt jest modularny i rozdzielony na logiczne komponenty:
 ### 🔹 Struktura backendów (komunikacja z modelami)
 - `llm_connector.py` – główny punkt wejścia: funkcja `ask_model(config)` deleguje zapytanie do odpowiedniego backendu.
 - `local_backend.py` – obsługa modeli lokalnych (np. Bielik z Hugging Face Transformers).
-- `api_backend.py` – obsługa modeli przez API (OpenAI, Gemini, Hugging Face Inference API).
+- `api_backend.py` – obsługa modeli przez API (OpenAI, Gemini).
 
 Backend wybierany jest dynamicznie na podstawie pola `api` w `model_config`.
 
@@ -45,7 +45,7 @@ Backend wybierany jest dynamicznie na podstawie pola `api` w `model_config`.
 │   ├── dataset_loader.py             # Wczytywanie danych testowych z pliku CSV/XLSX
 │   ├── llm_connector.py              # Delegator: wybiera odpowiedni backend w zależności od konfiguracji
 │   ├── local_backend.py              # Obsługa modeli lokalnych (np. Hugging Face, Bielik)
-│   ├── api_backend.py                # Obsługa modeli przez API (OpenAI, Gemini, HF Inference API)
+│   ├── `api_backend.py` – obsługa modeli przez API (OpenAI, Gemini).
 │   ├── response_saver.py             # Zapis wyników do JSON/JSONL
 │   └── utils.py                      # Funkcje pomocnicze (parsowanie outputu, budowa promptu)
 │
@@ -75,7 +75,7 @@ python benchmark_test_llm_main.py \
   --llm-name="Bielik" \
   --test="./test_files/test.xlsx" \
   --results="./results/bielik.json" \
-  --api="local"  # dostępne: local, openAI, google, hf_api
+  --api="local"  # dostępne: local, openAI, google
   --interval=0
 ```
 Po uruchomieniu benchmarku zapisywana jest lista surowych odpowiedzi modelu. 
@@ -90,9 +90,12 @@ Porównanie odpowiedzi z prawidłowymi i statystyki są generowane w osobnym kro
 ### Opcjonalne:
 
 - `--results` – ścieżka do pliku wyjściowego
-- `--api` – typ API (`local`, `openAI`, `vllm`)
+- `--api` – typ API (`local`, `openAI`, `google`)
+- `--max_new_tokens` – liczba nowych tokenów do wygenerowania (domyślnie 256)
 - `--url`, `--key` – jeśli używasz modelu przez API (np. OpenAI)
 - `--interval` – opóźnienie między zapytaniami
+
+Uwaga: parametr --max_length został zastąpiony przez --max_new_tokens. Dotyczy to tylko nowych tokenów generowanych przez model, bez wliczania treści promptu.
 
 ---
 
@@ -158,7 +161,7 @@ Testy obejmują m.in.:
 ## ✅ Status projektu
 
 - ✅ Modularna architektura backendów
-- ✅ Obsługa: `local`, `openAI`, `google`, `hf_api`
+- ✅ Obsługa: `local`, `openAI`, `google`
 - ✅ Czytelna struktura promptów i wyników
 - ✅ Obsługa wyjątków i błędów sieciowych
 - ✅ Pokrycie testami jednostkowymi i integracyjnymi
@@ -169,7 +172,7 @@ Testy obejmują m.in.:
 ## 🔧 Wymagania
 
 - Python 3.9+
-- Biblioteki: `pandas`, `openai`, `google-generativeai`, `argparse`, `dotenv`, `requests`
+- Biblioteki: `pandas`, `openai`, `google-generativeai`, `argparse`, `dotenv`
 
 Instalacja:
 

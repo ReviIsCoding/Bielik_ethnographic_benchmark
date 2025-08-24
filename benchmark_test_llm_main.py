@@ -20,7 +20,7 @@ def main():
     parser.add_argument("--api", type=str, required=True, help="API type: local | openAI | google| hf_api | vllm")
     parser.add_argument("--url", type=str, default=None, help="API URL (if applicable)")
     parser.add_argument("--key", type=str, default=None, help="API key (if applicable, otherwise loaded from .env)")
-    parser.add_argument("--max_length", type=int, default=256, help="Maximum length of the model's response")
+    parser.add_argument("--max_new_tokens", type=int, default=256, help="Max number of newly generated tokens")
     parser.add_argument("--use_q4", action='store_true', help="Use quantized model (local only)")
     parser.add_argument("--interval", type=int, default=1, help= "Delay between questions in seconds")
 
@@ -34,7 +34,7 @@ def main():
     model_config = {
         "api" : args.api,
         "model_id" : args.llm,
-        "max_length" : args.max_length,
+        "max_new_tokens": args.max_new_tokens,
         "use_q4" : args.use_q4,
         "api_key" : args.key,
         "url" : args.url
